@@ -1,0 +1,398 @@
+VLOOKUP(C2,Streaming_Stock_Watch!$D$8:$H$21,5,0)
+
+
+
+
+Sub main_data()
+
+Dim sourceColumn As Range, targetColumn As Range
+Dim wb As Workbook
+
+filePath = "D:\sacinOffice\Macro_Trade Tiger Live.xlsm"
+Dim sw As Workbook
+Set sw = Workbooks("Macro_Trade Tiger Live.xlsm")
+
+
+Set sourceColumn = sour.Columns("A")
+Set targetColumn = Shmain.Columns("A")
+
+sourceColumn.Copy Destination:=targetColumn
+
+Set sourceColumn = sour.Columns("F")
+Set targetColumn = Shmain.Columns("B")
+
+sourceColumn.Copy Destination:=targetColumn
+
+
+'Set sourceColumn = sour.Columns("B")
+'Set targetColumn = Shmain.Columns("C")
+'sourceColumn.Copy Destination:=targetColumn
+
+''
+sour.Select
+    Range("B1").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Application.CutCopyMode = False
+    Dim datt As Range
+   Set datt = Selection
+   Dim shdatt As Worksheet
+   Set shdatt = Sheets.Add
+    datt.Copy shdatt.Range("A1")
+    Dim datecopy As Range
+   Set datecopy = ActiveSheet.Range("A2").CurrentRegion
+   datecopy.TextToColumns Destination:=Range("A1"), DataType:=xlDelimited, Space:=True, consecutivedelimiter:=True
+   
+   
+    ActiveSheet.Range("E2").Select
+    Dim mer As Range
+    Set mer = Range("E2")
+    ActiveCell.FormulaR1C1 = _
+        "=RC[-4]&"" ""&TEXT(RC[-3],""DD-MMM-YYYY"")&"" ""&RC[-2]&"" ""&RC[-1]"
+    
+    Range("A2").Select
+    Selection.End(xlDown).Offset(0, 4).Select
+    
+    Range(Selection, Selection.End(xlUp)).Select
+    Range("e2").Copy Selection
+    
+    Selection.End(xlDown).Offset(0, 1).Select
+    mer.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "=TRIM(RC[-1])"
+    Range("F2").Offset(0, -1).Select
+    Selection.End(xlDown).Offset(0, 1).Select
+    Range("F2").Copy Range(Selection, Selection.End(xlUp))
+    Range("F2").Select
+    Dim comple As Range
+    Set comple = Range(Selection, Selection.End(xlDown))
+    comple.Copy
+    Shmain.Range("C2").PasteSpecial xlPasteValues
+    Application.DisplayAlerts = False
+    shdatt.Delete
+
+''''
+
+
+'Set sourceColumn = sour.Columns("C")
+'Set targetColumn = Shmain.Columns("H")
+'sourceColumn.Copy Destination:=targetColumn
+
+Application.CutCopyMode = False
+Shmain.Select
+Range("H2").Select
+    ActiveCell.FormulaR1C1 = _
+         "=IF(Sheet1!RC[-5]=""S"",""B"",IF(Sheet1!RC[-5]=""B"",""S""))"
+    Dim j As Range
+    Set j = Range("H2")
+    Application.CutCopyMode = False
+    j.Copy
+     Range("A2").Select
+    Selection.End(xlDown).Offset(0, 7).Select
+    
+    Dim h As Range
+   Set h = Range(Selection, Selection.End(xlUp))
+   j.Copy h
+    
+    'j.Offset(0, 1).End(xlDown).Select
+    ' Selection.Offset(0, -1).Select
+    'Dim snew As Range
+    'Set snew = Range(Selection, Selection.End(xlUp)).Offset(1, 0)
+
+h.Copy
+h.PasteSpecial Paste:=xlPasteValues
+    
+Set sourceColumn = sour.Columns("D")
+Set targetColumn = Shmain.Columns("I")
+sourceColumn.Copy Destination:=targetColumn
+
+'
+
+'
+
+Set sourceColumn = sour.Columns("E")
+Set targetColumn = Shmain.Columns("L")
+
+sourceColumn.Copy Destination:=targetColumn
+
+Set sourceColumn = sour.Columns("I")
+
+Set targetColumn = Shmain.Columns("F")
+
+sourceColumn.Copy Destination:=targetColumn
+
+'Set sourceColumn = sour.Columns("G")
+'Set targetColumn = Shmain.Columns("D")
+
+'sourceColumn.Copy Destination:=targetColumn
+
+Range("D2").Select
+    ActiveCell.FormulaR1C1 = _
+        "=VLOOKUP(RC[-1],Streaming_Stock_Watch!R8C4:R21C8,5,0)"
+    Range("D2").Offset(0, -1).Select
+    
+    
+    
+    Selection.End(xlDown).Offset(0, 1).Select
+    
+   Dim lookup As Range
+    Set lookup = Range(Selection, Selection.End(xlUp))
+    
+    Range("d2").Copy lookup
+    
+    
+    lookup.Copy
+    lookup.PasteSpecial Paste:=xlPasteValues
+    
+
+
+
+
+Set sourceColumn = sour.Columns("N")
+Set targetColumn = Shmain.Columns("O")
+
+sourceColumn.Copy Destination:=targetColumn
+
+Set sourceColumn = sour.Columns("O")
+Set targetColumn = Shmain.Columns("P")
+
+sourceColumn.Copy Destination:=targetColumn
+
+Set sourceColumn = sour.Columns("T")
+Set targetColumn = Shmain.Columns("J")
+
+sourceColumn.Copy Destination:=targetColumn
+
+Set sourceColumn = sour.Columns("K")
+Set targetColumn = Shmain.Columns("M")
+
+sourceColumn.Copy Destination:=targetColumn
+
+''
+
+End Sub
+
+
+Sub New_file()
+Do
+If Shmain.Range("a2").Value = "" Then Exit Do
+    Dim r As Range
+   Set r = Shmain.Range("A2:P151")
+    r.Copy
+    Sheets.Add After:=ActiveSheet
+    Range("A2").Select
+    ActiveSheet.Paste
+    r.Delete Shift:=xlUp
+    Application.CutCopyMode = False
+    Shmain.Rows("1:1").Copy
+    ActiveSheet.Range("A1").Select
+    ActiveSheet.Paste
+   
+        Loop
+        
+        
+  
+'adding newworkbook and pasting the new sheet to each workbook.
+
+Dim a As Integer
+a = ThisWorkbook.Worksheets.Count
+For i = 1 To a
+If ThisWorkbook.Worksheets(i).Name <> "Streaming_Stock_Watch" And _
+ThisWorkbook.Worksheets(i).Name <> "WorkArea" And _
+ThisWorkbook.Worksheets(i).Name <> "OrderArea" Then
+Dim sep As Workbook
+Set sep = Workbooks.Add
+ThisWorkbook.Worksheets(i).Copy sep.Worksheets(1)
+Application.DisplayAlerts = False
+sep.SaveAs "C:\Users\sachin.khewadiya\Desktop\macros_file_created" & "\" & ActiveSheet.Name & "_" & "csv"
+sep.Close True
+
+End If
+Next i
+
+
+
+
+
+Application.DisplayAlerts = False
+
+Shmain.Delete
+
+
+filePath = "D:\sacinOffice\Macro_Trade Tiger Live.xlsm"
+Dim sw As Workbook
+Set sw = Workbooks("Macro_Trade Tiger Live.xlsm")
+
+
+sw.SaveAs Filename:="C:\Users\sachin.khewadiya\Desktop\macros_file_created\New_stocks.xlsx", FileFormat:=xlOpenXMLWorkbook
+Application.DisplayAlerts = True
+VBA.MsgBox ("Task_Complete.")
+Workbooks("New_stocks.xlsx").Close savechanges:=True
+VBA.MsgBox ("Task_Complete.")
+Workbooks("Trade Tiger Live.xlsm").Close savechanges:=False
+
+End Sub
+
+
+
+
+
+
+### copy entire column base of header text.
+
+
+
+
+Sub cooy()
+
+Dim val
+searchtxt = "EXCHANGE"
+
+
+
+
+Dim lastcol As Long, erow As Long
+lastcol = sour.Cells(1, Columns.Count).End(xlToLeft).Column
+For I = 1 To lastcol
+If sour.Cells(1, I) = searchtxt Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("A1")
+    Shmain.Select
+ Else
+ If sour.Cells(1, I) = "ORS TOKEN" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("B1")
+    Shmain.Select
+Else
+ If sour.Cells(1, I) = "CONTRACT" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("c1")
+    Shmain.Select
+ Else
+    If sour.Cells(1, I) = "ORDER QTY" Then
+ sour.Select
+ Cells(2, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("f2")
+    Shmain.Select
+    Else
+    If sour.Cells(1, I) = "BUY SELL" Then
+ sour.Select
+ Cells(1, I).Select
+ 
+ Shmain.Select
+ Range("H2").Select
+    ActiveCell.FormulaR1C1 = _
+         "=IF(Sheet1!RC[-5]=""S"",""B"",IF(Sheet1!RC[-5]=""B"",""S""))"
+    Dim j As Range
+    Set j = Range("H2")
+    Application.CutCopyMode = False
+    j.Copy
+     Range("A2").Select
+    Selection.End(xlDown).Offset(0, 7).Select
+    
+    Dim h As Range
+   Set h = Range(Selection, Selection.End(xlUp))
+   j.Copy h
+    
+h.Copy
+h.PasteSpecial Paste:=xlPasteValues
+    
+    Else
+    If sour.Cells(1, I) = "ORDER TYPE" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("i1")
+    Shmain.Select
+    
+    Else
+    If sour.Cells(1, I) = "EXCHANGE ORDER ID" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("j1")
+    Shmain.Select
+    
+    Else
+    If sour.Cells(1, I) = "CUSTOMER ID" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("L1")
+    Shmain.Select
+    
+    Else
+    If sour.Cells(1, I) = "S2KID" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("M1")
+    Shmain.Select
+    
+     Else
+    If sour.Cells(1, I) = "EXEC PRICE" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("o1")
+    Shmain.Select
+    
+    Else
+    If sour.Cells(1, I) = "CHANNEL CODE" Then
+ sour.Select
+ Cells(1, I).Select
+  Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy Shmain.Range("p1")
+    Shmain.Select
+    
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+End If
+
+Next I
+
+Shmain.Select
+Range("D2").Select
+    ActiveCell.FormulaR1C1 = _
+        "=VLOOKUP(RC[-1],Streaming_Stock_Watch!R8C4:R21C8,5,0)"
+    Range("D2").Offset(0, -1).Select
+    
+    
+    
+    Selection.End(xlDown).Offset(0, 1).Select
+    
+   Dim lookup As Range
+    Set lookup = Range(Selection, Selection.End(xlUp))
+    
+    Range("d2").Copy lookup
+
+End Sub
+ 
+
+
+
+
+
